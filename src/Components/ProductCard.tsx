@@ -1,5 +1,7 @@
-const ProductCard = () => {
-	return <h1>Product Card element</h1>;
+import type { ProductCardProps } from "../types";
+
+const ProductCard = ({ product }: ProductCardProps) => {
+	return <h1>{product.title}</h1>;
 };
 
 export default ProductCard;
