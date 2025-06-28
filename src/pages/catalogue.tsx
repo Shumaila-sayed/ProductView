@@ -1,7 +1,15 @@
+import Header from '../Components/Header';
+import ProductCard from '../Components/ProductCard';
+
 const Catalogue = () => {
-    return (
-        <h1>Catalogue page</h1>
-    )
-}
+	return (
+		<>
+			<Header />
+			<div>
+				<ProductCard />
+			</div>
+		</>
+	);
+};
 
 export default Catalogue;
