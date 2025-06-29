@@ -18,6 +18,7 @@ const Form = () => {
 					id='user'
 					placeholder='Enter your username'
 					className='bg-gray-100 rounded-sm px-2 py-1.5 mb-2 placeholder:text-[14px]'
+					required
 				/>
 
 				<label htmlFor='pwd'>
@@ -30,6 +31,7 @@ const Form = () => {
 					id='pwd'
 					placeholder='Enter your password'
 					className='bg-gray-100 rounded-sm px-2 py-1.5 placeholder:text-[14px]'
+					required
 				/>
 				<p className='text-[12px]'>
 					<span className='text-red-500'>* Indicates required Field</span>

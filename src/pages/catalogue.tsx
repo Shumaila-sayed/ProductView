@@ -8,9 +8,9 @@ const baseUrl = import.meta.env.VITE_BASE_URL_PRODUCTS;
 const Catalogue = () => {
 	const [allProducts, setAllProducts] = useState<Product[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState('');
 
-	const [searchText, setSearchText] = useState("");
+	const [searchText, setSearchText] = useState('');
 	const [productList, setProductList] = useState<Product[]>([]);
 
 	const fetchProducts = async () => {
@@ -25,7 +25,7 @@ const Catalogue = () => {
 			}
 
 			const data = await response.json();
-			
+
 			if (data.Response === 'False') {
 				setErrorMessage(data.Error || 'Failed to fetch products.');
 				setProductList([]);
@@ -44,7 +44,7 @@ const Catalogue = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}
+	};
 
 	useEffect(() => {
 		fetchProducts();
@@ -55,24 +55,27 @@ const Catalogue = () => {
 			return product.title.toLowerCase().includes(searchText);
 		});
 		console.log(newProducts);
-		
-		setProductList(newProducts);
-	}, [searchText])
 
+		setProductList(newProducts);
+	}, [searchText]);
 
 	return (
-		<>
-			<Header
-				setSearchText={setSearchText}
-			/>
+		< >
+			<Header setSearchText={setSearchText} />
 			<div>
-				<h1>Discover Your Style</h1>
+				<h1 className='text-2xl ml-3 mb-3 font-semibold md:ml-8 text-gray-900'>
+					View Products you{' '}
+					<span className='decoration-emerald-400 underline'>Love!</span>
+				</h1>
 				{isLoading ? (
 					<Spinner />
 				) : errorMessage ? (
 					<p>{errorMessage}</p>
 				) : (
-					<div>
+					<div
+						className='grid grid-cols-[repeat(auto-fit,minmax(12em,0.2fr))] px-2 gap-y-8 md:gap-x-5 md:py-2 md:px-4 
+                 md:grid-cols-[repeat(auto-fit,minmax(18em,1fr))]'
+					>
 						{productList.map((product) => (
 							<ProductCard
 								product={product}
