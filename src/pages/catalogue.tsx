@@ -6,9 +6,12 @@ import type { Product } from '../types';
 const baseUrl = import.meta.env.VITE_BASE_URL_PRODUCTS;
 
 const Catalogue = () => {
-	const [productList, setProductList] = useState<Product[]>([]);
+	const [allProducts, setAllProducts] = useState<Product[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+
+	const [searchText, setSearchText] = useState("");
+	const [productList, setProductList] = useState<Product[]>([]);
 
 	const fetchProducts = async () => {
 		setIsLoading(true);
@@ -31,6 +34,7 @@ const Catalogue = () => {
 
 			if (data.products) {
 				console.log(data);
+				setAllProducts(data.products);
 				setProductList(data.products);
 				setIsLoading(false);
 			}
@@ -46,22 +50,36 @@ const Catalogue = () => {
 		fetchProducts();
 	}, []);
 
+	useEffect(() => {
+		const newProducts = allProducts.filter((product) => {
+			return product.title.toLowerCase().includes(searchText);
+		});
+		console.log(newProducts);
+		
+		setProductList(newProducts);
+	}, [searchText])
+
 
 	return (
 		<>
-			<Header />
+			<Header
+				setSearchText={setSearchText}
+			/>
 			<div>
 				<h1>Discover Your Style</h1>
 				{isLoading ? (
 					<Spinner />
 				) : errorMessage ? (
-						<p>{errorMessage}</p>
-					) : (
-							<div>
-								{productList.map((product) => (
-									<ProductCard product={product} key={product.id}/>
-								))}
-							</div>
+					<p>{errorMessage}</p>
+				) : (
+					<div>
+						{productList.map((product) => (
+							<ProductCard
+								product={product}
+								key={product.id}
+							/>
+						))}
+					</div>
 				)}
 			</div>
 		</>

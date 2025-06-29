@@ -9,3 +9,7 @@ export type Product = {
 export type ProductCardProps = {
 	product: Product;
 };
+
+export type HeaderProps = {
+	setSearchText: (text: string) => void;
+}
