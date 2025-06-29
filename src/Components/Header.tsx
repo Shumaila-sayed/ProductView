@@ -1,5 +1,7 @@
 const Header = () => {
 	return (
+		<div>
+			<h1>Product Viewer</h1>
 		<div className='flex p-6 justify-between'>
 			<input
 				type='search'
@@ -15,6 +17,7 @@ const Header = () => {
 				/> */}
 				icon
 			</span>
+			</div>
 		</div>
 	);
 };
