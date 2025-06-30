@@ -1,13 +1,79 @@
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ProtectedRoutes from '../utils/ProtectedRoutes';
+import { toast, ToastContainer } from 'react-toastify';
+const baseUrl = import.meta.env.VITE_BASE_URL_USER;
 
 const Form = () => {
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+
+	const [isLogged, setIsLogged] = useState(false);
+	const navigate = useNavigate();
+
+	const fetchUser = async () => {
+		try {
+			const response = await fetch(baseUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					username: username,
+					password: password,
+					expiresInMins: 30,
+				}),
+			});
+
+			const data = await response.json();
+			console.log(data);
+			if (data.message) {
+				toast.error(data.message);
+				return;
+			}
+			setIsLogged(true);
+		} catch (error) {
+			console.log(`Error fetching user ${error}`);
+			toast.error('Error Logging In');
+		}
+	};
+
+	useEffect(() => {
+		if (isLogged) {
+			ProtectedRoutes(true);
+			navigate('/catalogue');
+		}
+	}, [isLogged]);
+
+	const proceedLogin = (e) => {
+		e.preventDefault();
+		if (validate()) {
+			fetchUser();
+		}
+	};
+
+	const validate = () => {
+		let result = true;
+		if (username === '' || username === null) {
+			result = false;
+			toast.warning('Please Enter Username');
+		}
+		if (password === '' || password === null) {
+			result = false;
+			toast.warning('Please Enter Password');
+		}
+
+		return result;
+	};
+
 	return (
 		<>
 			<h1 className='text-2xl text-center md:mt-[-50px] mt-12 mb-6 font-mono'>
 				Log in to View our{' '}
 				<span className='decoration-emerald-400 underline'>Products!</span>
 			</h1>
-			<form className='flex flex-col gap-1.5 m-auto max-w-60'>
+			<form
+				onSubmit={proceedLogin}
+				className='flex flex-col gap-1.5 m-auto max-w-60'
+			>
 				<label htmlFor='user'>
 					<span className='text-red-500'>*</span> Name
 				</label>
@@ -18,7 +84,8 @@ const Form = () => {
 					id='user'
 					placeholder='Enter your username'
 					className='bg-gray-100 rounded-sm px-2 py-1.5 mb-2 placeholder:text-[14px]'
-					required
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
 				/>
 
 				<label htmlFor='pwd'>
@@ -31,17 +98,20 @@ const Form = () => {
 					id='pwd'
 					placeholder='Enter your password'
 					className='bg-gray-100 rounded-sm px-2 py-1.5 placeholder:text-[14px]'
-					required
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<p className='text-[12px]'>
 					<span className='text-red-500'>* Indicates required Field</span>
 				</p>
-				<NavLink
-					to='/catalogue'
+
+				<button
+					type='submit'
 					className='bg-green-600  text-gray-50 font-semibold rounded-xl px-10 py-1.5 mt-2 text-center cursor-pointer hover:bg-green-700'
 				>
-					<button>Login</button>
-				</NavLink>
+					Login
+				</button>
+				<ToastContainer />
 			</form>
 		</>
 	);
