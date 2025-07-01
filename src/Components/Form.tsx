@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProtectedRoutes from '../utils/ProtectedRoutes';
 import { toast, ToastContainer } from 'react-toastify';
+import type { LoginProps } from '../types';
 const baseUrl = import.meta.env.VITE_BASE_URL_USER;
 
-const Form = () => {
+const Form = ({isLogged, setIsLogged}: LoginProps) => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
-	const [isLogged, setIsLogged] = useState(false);
 	const navigate = useNavigate();
 
 	const fetchUser = async () => {
@@ -38,12 +37,11 @@ const Form = () => {
 
 	useEffect(() => {
 		if (isLogged) {
-			ProtectedRoutes(true);
 			navigate('/catalogue');
 		}
 	}, [isLogged]);
 
-	const proceedLogin = (e) => {
+	const proceedLogin = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (validate()) {
 			fetchUser();

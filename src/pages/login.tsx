@@ -1,6 +1,7 @@
 import Form from "../Components/Form";
+import type { LoginProps } from "../types";
 
-const Login = () => {
+const Login = ({isLogged, setIsLogged}: LoginProps) => {
 	return (
 		<div className=' flex flex-col items-center h-screen md:flex-row'>
 			<div className='max-w-fit bg-linear-to-b from-green-600 to-red-500 md:self-stretch flex justify-center items-center md:min-w-2xl p-5'>
@@ -12,7 +13,7 @@ const Login = () => {
 			</div>
 
 			<div className='flex-1 '>
-				<Form />
+				<Form isLogged={isLogged} setIsLogged={setIsLogged} />
 			</div>
 		</div>
 	);
